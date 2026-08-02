@@ -1,0 +1,25 @@
+{
+  "@context": "https://w3id.org/codemeta/3.0",
+  "@type": "SoftwareSourceCode",
+  "name": "pv-dimensionality-reduction: filter/wrapper diagnostics for endogenous PV power forecasting",
+  "description": "MATLAB code for short-term photovoltaic power forecasting from the post-inverter signal alone (no exogenous meteorological inputs), framed as a geometric compression of a lagged-power window. Seven dimensionality-reduction techniques are assessed with two complementary diagnostics: a model-free filter measuring geometry preservation, and a wrapper based on an Extreme Learning Machine, all reported against a shared accuracy-frugality trade-off.",
+  "version": "1.0.0",
+  "dateModified": "2026-07-28",
+  "license": "https://spdx.org/licenses/MIT",
+  "codeRepository": "https://github.com/cyrilvoyant/pv-dimensionality-reduction",
+  "identifier": "https://doi.org/10.5281/zenodo.21755939",
+  "programmingLanguage": "MATLAB",
+  "runtimePlatform": "MATLAB R2025b",
+  "developmentStatus": "active",
+  "applicationCategory": "Photovoltaic power forecasting",
+  "keywords": ["photovoltaic power forecasting", "solar energy", "dimensionality reduction", "manifold learning", "extreme learning machine", "time series forecasting", "frugal machine learning", "renewable energy"],
+  "author": [
+    {"@type": "Person", "givenName": "Hassen", "familyName": "Bouzgou", "affiliation": {"@type": "Organization", "name": "University of Batna 2, Batna, Algeria"}},
+    {"@type": "Person", "givenName": "Gabriel", "familyName": "Chesnoiu", "affiliation": {"@type": "Organization", "name": "Mines Paris - PSL, Centre Observation, Impacts, Energie (O.I.E.), Sophia Antipolis, France"}},
+    {"@type": "Person", "givenName": "Claudio F.", "familyName": "Nicolosi", "affiliation": {"@type": "Organization", "name": "University of Catania, DIEEI, Catania, Italy"}},
+    {"@type": "Person", "givenName": "Adrien", "familyName": "Chatel", "affiliation": {"@type": "Organization", "name": "SPE Laboratory, University of Corsica, Ajaccio, France"}},
+    {"@type": "Person", "givenName": "Gilles", "familyName": "Notton", "affiliation": {"@type": "Organization", "name": "SPE Laboratory, University of Corsica, Ajaccio, France"}},
+    {"@type": "Person", "givenName": "Lionel", "familyName": "Menard", "affiliation": {"@type": "Organization", "name": "Mines Paris - PSL, Centre Observation, Impacts, Energie (O.I.E.), Sophia Antipolis, France"}},
+    {"@type": "Person", "givenName": "Cyril", "familyName": "Voyant", "@id": "https://orcid.org/0000-0003-0242-7377", "url": "https://person.cyrilvoyant.com", "affiliation": {"@type": "Organization", "name": "Mines Paris - PSL, Centre Observation, Impacts, Energie (O.I.E.), Sophia Antipolis, France"}}
+  ]
+}
