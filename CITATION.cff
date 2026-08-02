@@ -67,3 +67,8 @@ preferred-citation:
       given-names: Lionel
     - family-names: Voyant
       given-names: Cyril
+
+identifiers:
+  - type: doi
+    value: "10.5281/zenodo.21755939"
+    description: "Concept DOI (all versions, Zenodo)"

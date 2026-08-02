@@ -1,5 +1,6 @@
 # pv-dimensionality-reduction
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21755939.svg)](https://doi.org/10.5281/zenodo.21755939)
 **How much of the lagged photovoltaic (PV) signal do you actually need to forecast it?**
 
 This repository contains the MATLAB code behind a study on short-term PV power
