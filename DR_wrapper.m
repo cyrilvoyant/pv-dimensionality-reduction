@@ -36,7 +36,8 @@ function W = DR_wrapper(D, EMB, P)
         NS_a = nan(1,nDim); RMSE_a = nan(1,nDim); nRMSE_a = nan(1,nDim);
         R2_a = nan(1,nDim); N1_a = nan(1,nDim); N2_a = nan(1,nDim); N3_a = nan(1,nDim);
 
-        parfor j = 1:nDim
+        Mw = P.parworkers;
+        parfor (j = 1:nDim, Mw)
             [Ytr_d, Yte_d, ok] = emb_slice(E, j);
             if ~ok, continue; end
 

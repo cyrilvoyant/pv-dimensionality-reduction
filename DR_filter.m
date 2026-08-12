@@ -52,7 +52,8 @@ function [F, curves] = DR_filter(D, EMB, P)
         fprintf('    [filter]  %s\n', method);
 
         Srow = nan(1, nDim);
-        parfor j = 1:nDim
+        Mw = P.parworkers;
+        parfor (j = 1:nDim, Mw)
             [Ytr_d, ~, ok] = emb_slice(E, j);
             if ~ok, continue; end
             Yf = Ytr_d(idx_f, :);

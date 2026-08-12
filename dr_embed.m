@@ -9,9 +9,11 @@ function E = dr_embed(method, X_train, X_test, P)
 %     ensuite colonne par colonne. Pour les methodes non lineaires, on ajuste
 %     sur un sous-echantillon de landmarks tires dans X_train (borne la
 %     decomposition propre a L x L) puis on etend a tous les points :
-%         * KernelPCA / Isomap / LLE / Laplacian -> out_of_sample (natif),
-%           avec repli sur oos_knn si la sortie n'est pas finie ;
-%         * DiffusionMaps -> oos_knn (pas d'extension native).
+%         * KernelPCA -> out_of_sample natif (vectorise, rapide, exact) ;
+%         * Isomap / LLE / Laplacian / DiffusionMaps -> interpolation kNN
+%           (Nystrom) depuis les landmarks. Leur OOS natif boucle point par
+%           point (Dijkstra, inversions locales) : prohibitif sur ~10^4
+%           points et parfois singulier (LLE).
 %   - Autoencoder : embedding NON emboite, recalcule pour chaque dimension.
 %
 % Aucune fuite : l'ajustement ne voit que X_train ; X_test n'est que projete.
@@ -31,13 +33,14 @@ function E = dr_embed(method, X_train, X_test, P)
         Yte = cell(1, nD);
         drp = P.drtoolbox_path;
         dims = E.dims;
-        parfor j = 1:nD
+        Mw = P.parworkers;
+        parfor (j = 1:nD, Mw)
             addpath(genpath(drp));
             d = dims(j);
             try
-                [ytr, map] = compute_mapping(X_train, 'Autoencoder', d);
+                [ytr, map] = run_quiet(@() compute_mapping(X_train, 'Autoencoder', d));
                 Ytr{j} = ytr;
-                Yte{j} = out_of_sample(X_test, map);
+                Yte{j} = run_quiet(@() out_of_sample(X_test, map));
             catch ME
                 warning('[Autoencoder] dim=%d embedding KO : %s', d, ME.message);
             end
@@ -53,8 +56,8 @@ function E = dr_embed(method, X_train, X_test, P)
     try
         if strcmpi(method, 'PCA')
             % Lineaire et peu couteux : ajuste sur tout X_train.
-            [Ytr, map] = compute_mapping(X_train, 'PCA', maxdim);
-            Yte = out_of_sample(X_test, map);
+            [Ytr, map] = run_quiet(@() compute_mapping(X_train, 'PCA', maxdim));
+            Yte = run_quiet(@() out_of_sample(X_test, map));
         else
             % Non lineaire : ajustement sur landmarks (tires sur toute la
             % periode de calibration, donc toutes saisons representees).
@@ -64,22 +67,19 @@ function E = dr_embed(method, X_train, X_test, P)
             Xl   = X_train(Lsel, :);
 
             if strcmpi(method, 'LLE')
-                % La drtoolbox ne regularise le Gram local de LLE que si
-                % k > no_dims ; on ajuste a no_dims = maxdim, donc on force
-                % k > maxdim pour eviter un Gram singulier (poids NaN).
-                [Yl, map] = compute_mapping(Xl, method, maxdim, maxdim + 1);
+                % LLE : k > no_dims force la regularisation du Gram local
+                % (sinon poids NaN au calcul de l'embedding des landmarks).
+                [Yl, map] = run_quiet(@() compute_mapping(Xl, method, maxdim, maxdim + 1));
             else
-                [Yl, map] = compute_mapping(Xl, method, maxdim);
+                [Yl, map] = run_quiet(@() compute_mapping(Xl, method, maxdim));
             end
 
-            if strcmpi(method, 'DiffusionMaps')
-                Ytr = oos_knn(X_train, Xl, Yl, P.KNN_OOS);
-                Yte = oos_knn(X_test,  Xl, Yl, P.KNN_OOS);
-            else
+            if strcmpi(method, 'KernelPCA')
+                % OOS natif vectorise et rapide ; repli kNN si non fini.
                 ok = false;
                 try
-                    Ytr = out_of_sample(X_train, map);
-                    Yte = out_of_sample(X_test,  map);
+                    Ytr = run_quiet(@() out_of_sample(X_train, map));
+                    Yte = run_quiet(@() out_of_sample(X_test,  map));
                     ok  = all(isfinite(Ytr(:))) && all(isfinite(Yte(:)));
                 catch ME2
                     warning('[%s] OOS natif exception : %s', method, ME2.message);
@@ -89,6 +89,12 @@ function E = dr_embed(method, X_train, X_test, P)
                     Ytr = oos_knn(X_train, Xl, Yl, P.KNN_OOS);
                     Yte = oos_knn(X_test,  Xl, Yl, P.KNN_OOS);
                 end
+            else
+                % Isomap / LLE / Laplacian / DiffusionMaps : OOS natif trop
+                % lent (boucle point par point) et parfois singulier (LLE) ->
+                % interpolation kNN (Nystrom) depuis les landmarks.
+                Ytr = oos_knn(X_train, Xl, Yl, P.KNN_OOS);
+                Yte = oos_knn(X_test,  Xl, Yl, P.KNN_OOS);
             end
         end
         E.Ytr  = Ytr;

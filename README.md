@@ -145,13 +145,20 @@ Two notes worth keeping in mind:
 
 | Method | Nature | Out-of-sample extension |
 |---|---|---|
-| PCA | linear, spectral | native |
-| Kernel PCA | nonlinear (kernel) | native (fitted on landmarks) |
-| Isomap | geodesic manifold | native (fitted on landmarks) |
-| LLE | local linear patches | k-NN interpolation (native is ill-conditioned here) |
-| Laplacian Eigenmaps | graph spectral | native (fitted on landmarks) |
-| Diffusion Maps | Markov diffusion | k-NN interpolation (no native operator) |
+| PCA | linear, spectral | native (exact projection) |
+| Kernel PCA | nonlinear (kernel) | native, fitted on landmarks |
+| Isomap | geodesic manifold | k-NN interpolation from landmarks |
+| LLE | local linear patches | k-NN interpolation from landmarks |
+| Laplacian Eigenmaps | graph spectral | k-NN interpolation from landmarks |
+| Diffusion Maps | Markov diffusion | k-NN interpolation from landmarks |
 | Autoencoder | nonlinear encoder–decoder | native, one training per dimension |
+
+The manifold methods (Isomap, LLE, Laplacian, Diffusion Maps) are extended by a
+distance-weighted k-NN interpolation from the landmarks rather than by the
+toolbox's native out-of-sample operator: the latter loops point by point
+(Dijkstra, local inversions), which is prohibitive on ~10⁴ evaluation points and
+numerically unstable for LLE. PCA and Kernel PCA keep their exact, vectorised
+projections; the autoencoder uses its trained decoder.
 
 ---
 
@@ -173,6 +180,22 @@ Everything is set in the `P` struct at the top of `main.m`. The most useful:
 | `filter_nmax` | subsample size for the geometric score (it is O(n²)) |
 | `filter_alpha`, `filter_k`, `filter_q` | filter score weighting, neighbourhood, and selection threshold |
 | `run_wrapper`, `run_filter` | run either or both diagnostics |
+| `parallel` | `true` uses a parallel pool; `false` runs everything serially |
+| `nworkers` | requested pool size (capped to the machine's cores) |
+
+## Long runs
+
+The full configuration (two years, five horizons) is a multi-hour job, so the
+script is built to survive interruptions:
+
+- it prints where it is and how long each step took —
+  `embed 12/35 | FH 3.0h | Laplacian | 8.2 min`, then per-phase and per-horizon
+  timings;
+- after **each horizon** it writes a checkpoint (`Results_checkpoint.mat`) and
+  the partial CSVs, and on the next launch it **reloads and skips the horizons
+  already done**, so a crash never sends you back to zero;
+- the parallel pool is created with its idle timeout disabled, which avoids the
+  classic "pool shut down" failure during long serial phases.
 
 ---
 
