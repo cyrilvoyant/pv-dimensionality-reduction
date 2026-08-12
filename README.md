@@ -195,7 +195,10 @@ script is built to survive interruptions:
   the partial CSVs, and on the next launch it **reloads and skips the horizons
   already done**, so a crash never sends you back to zero;
 - the parallel pool is created with its idle timeout disabled, which avoids the
-  classic "pool shut down" failure during long serial phases.
+  classic "pool shut down" failure during long serial phases;
+- the verbose toolbox output (welcome banners, autoencoder training traces,
+  near-singular warnings) is muted through `run_quiet` — a small `evalc`
+  wrapper — so the terminal shows only the progress lines above.
 
 ---
 
