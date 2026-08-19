@@ -30,29 +30,40 @@ function D = prepare_supervised(data, dt_all, P, FH)
     D.y_test  = PVout(idx_split+1:end);
     D.n_test  = numel(D.y_test);
 
-    % Features temporelles, calculees sur le timestamp de la CIBLE y(t+h).
-    % Elles augmentent les entrees des modeles ELM/AR mais ne passent jamais
-    % par la reduction de dimension (qui ne compresse que les 48 retards).
+    % Timestamps de la CIBLE y(t+h) : servent aux features temporelles ET au
+    % masque nuit.
+    tgt_idx = (1:size(PVin,1))' + LB + FH - 1;
+    dt      = dt_all(tgt_idx);
+
+    % Features temporelles (heure + jour, sin/cos). Elles augmentent les
+    % entrees ELM/AR mais ne passent jamais par la reduction de dimension.
     if P.USE_TEMPORAL
-        tgt_idx = (1:size(PVin,1))' + LB + FH - 1;
-        dt      = dt_all(tgt_idx);
-        hod     = hour(dt) + minute(dt)/60;             % heure decimale [0,24)
-        doy     = day(dt, 'dayofyear');                 % 1..366
-        TEMP    = [sin(2*pi*hod/24),     cos(2*pi*hod/24), ...
-                   sin(2*pi*doy/365.25), cos(2*pi*doy/365.25)];
+        hod  = hour(dt) + minute(dt)/60;                % heure decimale [0,24)
+        doy  = day(dt, 'dayofyear');                    % 1..366
+        TEMP = [sin(2*pi*hod/24),     cos(2*pi*hod/24), ...
+                sin(2*pi*doy/365.25), cos(2*pi*doy/365.25)];
     else
         TEMP = zeros(size(PVin,1), 0);
     end
     D.TEMP_train = TEMP(1:idx_split, :);
     D.TEMP_test  = TEMP(idx_split+1:end, :);
 
-    % Denominateurs NICE^k : erreurs de la persistance simple sur le test.
-    % PVin(:,end) = y(t) donc la persistance simple aura NICE^k = 1 (definition).
-    D.Persis_simple_test = PVin(idx_split+1:end, end);
-    D.MAE_P  = compute_Lk_error(D.y_test, D.Persis_simple_test, 1);
-    D.RMSE_P = compute_Lk_error(D.y_test, D.Persis_simple_test, 2);
-    D.RMCE_P = compute_Lk_error(D.y_test, D.Persis_simple_test, 3);
-    D.mean_y_test = mean(D.y_test);
+    % Masque NUIT sur le test : elevation solaire <= 0 a l'instant cible.
+    % La production PV y est nulle, il n'y a rien a prevoir ; on force la
+    % prevision a 0 la nuit (dans eval_metrics), sinon la persistance y est
+    % trivialement parfaite et gonfle les metriques.
+    el_test   = solar_elevation(dt(idx_split+1:end), P.lat, P.lon);
+    D.isnight = el_test <= 0;
+
+    % Denominateurs NICE^k : persistance simple, elle aussi mise a 0 la nuit
+    % (pour rester coherente avec la prevision ; la persistance garde NICE^k=1).
+    Persis = PVin(idx_split+1:end, end);
+    Persis(D.isnight) = 0;
+    D.Persis_simple_test = Persis;
+    D.MAE_P  = compute_Lk_error(D.y_test, Persis, 1);
+    D.RMSE_P = compute_Lk_error(D.y_test, Persis, 2);
+    D.RMCE_P = compute_Lk_error(D.y_test, Persis, 3);
+    D.mean_y_test = mean(D.y_test(~D.isnight));         % nRMSE normalise sur le jour
 
     % Elements necessaires aux persistances cyclique / blend.
     D.data        = data;

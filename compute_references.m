@@ -68,7 +68,7 @@ function T = ref_row(name, nP, redPct, D, y_pred, denom, bestdim)
 % Fabrique une ligne de reference en evaluant les metriques d'erreur.
     if nargin < 7, bestdim = NaN; end
     [rmse, nrmse, r2, n1, n2, n3, nS] = ...
-        eval_metrics(D.y_test, y_pred, denom{1}, denom{2}, denom{3}, denom{4});
+        eval_metrics(D.y_test, y_pred, denom{1}, denom{2}, denom{3}, denom{4}, D.isnight);
     T = result_row(name, D.LB_days, D.FH_hours, bestdim, nP, redPct, NaN, ...
                    rmse, nrmse, r2, n1, n2, n3, nS);
 end

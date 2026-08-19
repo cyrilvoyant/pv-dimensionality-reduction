@@ -52,6 +52,8 @@ P.techniques  = {'PCA', 'KernelPCA', 'Isomap', ...
 P.drtoolbox_path = fullfile(here, 'drtoolbox');   % chemin absolu (visible par les workers parfor)
 P.dataDir     = 'data';                            % sous-dossier des donnees (repli : racine du projet)
 P.fileName    = 'PV_AC_20200801_20250706_Palaiseau.csv';   % un site ; format a conserver
+P.lat         = 48.7131;       % latitude du site (deg N) -- Palaiseau ; a changer par site
+P.lon         = 2.2121;        % longitude du site (deg E) -- pour le masque nuit (elevation solaire)
 
 P.KNN_OOS     = 12;            % voisins pour l'extension kNN (DiffusionMaps / repli)
 P.SEED        = 42;            % reproductibilite (landmarks, sous-echantillons)

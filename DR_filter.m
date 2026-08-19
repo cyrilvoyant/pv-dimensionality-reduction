@@ -90,7 +90,7 @@ function [F, curves] = DR_filter(D, EMB, P)
                 [beta, IW, Bias] = elm_train(Ztr, D.y_train, nh, P.N_ELM_candidates, P.ridge);
                 yhat = 1 ./ (1 + exp(-(Zte * IW' + Bias'))) * beta;
                 [rmse, nrmse, r2, n1, n2, n3, nS] = ...
-                    eval_metrics(D.y_test, yhat, D.MAE_P, D.RMSE_P, D.RMCE_P, D.mean_y_test);
+                    eval_metrics(D.y_test, yhat, D.MAE_P, D.RMSE_P, D.RMCE_P, D.mean_y_test, D.isnight);
             end
         end
 

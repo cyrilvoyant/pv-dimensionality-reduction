@@ -1,5 +1,10 @@
 function [rmse, nrmse, r2, nice1, nice2, nice3, niceS] = ...
-        eval_metrics(y_test, y_pred, MAE_P, RMSE_P, RMCE_P, mean_y)
+        eval_metrics(y_test, y_pred, MAE_P, RMSE_P, RMCE_P, mean_y, isnight)
+%   isnight (optionnel) : masque logique du test. La ou il vaut true, la
+%   prevision est forcee a 0 (production PV nulle la nuit, rien a prevoir).
+    if nargin >= 7 && ~isempty(isnight)
+        y_pred(isnight) = 0;
+    end
 % Bloc de metriques commun a tous les modeles (baselines, ELM, AR).
 %   nRMSE = RMSE / moyenne de production sur le test.
 %   NICE^k = norme L^k de l'erreur du modele rapportee a celle de la
