@@ -28,7 +28,8 @@ function W = DR_wrapper(D, EMB, P)
         ytr  = D.y_train;     yte  = D.y_test;
         nc   = P.N_ELM_candidates;   ridge = P.ridge;
         MAE_P = D.MAE_P; RMSE_P = D.RMSE_P; RMCE_P = D.RMCE_P; myt = D.mean_y_test;
-        nite  = D.isnight;   % masque nuit -> prevision forcee a 0
+        nite  = D.isnight;   % masque nuit
+        nmode = D.night;     % 'day' (defaut) | 'zero' | 'all'
 
         % ELM
         NS_e = nan(1,nDim); RMSE_e = nan(1,nDim); nRMSE_e = nan(1,nDim);
@@ -49,13 +50,13 @@ function W = DR_wrapper(D, EMB, P)
             [beta, IW, Bias] = elm_train(Ztr, ytr, nh, nc, ridge);
             yhat = 1 ./ (1 + exp(-(Zte * IW' + Bias'))) * beta;
             [RMSE_e(j), nRMSE_e(j), R2_e(j), N1_e(j), N2_e(j), N3_e(j), NS_e(j)] = ...
-                eval_metrics(yte, yhat, MAE_P, RMSE_P, RMCE_P, myt, nite);
+                eval_metrics(yte, yhat, MAE_P, RMSE_P, RMCE_P, myt, nite, nmode);
 
             % (b) AR reduit (lineaire)
             ba   = [Ztr, ones(size(Ztr,1),1)] \ ytr;
             yhat = [Zte, ones(size(Zte,1),1)] * ba;
             [RMSE_a(j), nRMSE_a(j), R2_a(j), N1_a(j), N2_a(j), N3_a(j), NS_a(j)] = ...
-                eval_metrics(yte, yhat, MAE_P, RMSE_P, RMCE_P, myt, nite);
+                eval_metrics(yte, yhat, MAE_P, RMSE_P, RMCE_P, myt, nite, nmode);
         end
 
         % Meilleure dimension ELM

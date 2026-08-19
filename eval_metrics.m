@@ -1,9 +1,20 @@
 function [rmse, nrmse, r2, nice1, nice2, nice3, niceS] = ...
-        eval_metrics(y_test, y_pred, MAE_P, RMSE_P, RMCE_P, mean_y, isnight)
-%   isnight (optionnel) : masque logique du test. La ou il vaut true, la
-%   prevision est forcee a 0 (production PV nulle la nuit, rien a prevoir).
+        eval_metrics(y_test, y_pred, MAE_P, RMSE_P, RMCE_P, mean_y, isnight, night_mode)
+% Traitement de la nuit (production PV nulle, rien a prevoir) selon night_mode :
+%   'day'  : metriques calculees de JOUR uniquement, nuit exclue   [defaut]
+%   'zero' : prevision forcee a 0 la nuit, metriques sur tout
+%   'all'  : aucun traitement (jour + nuit bruts)
+% isnight est le masque logique nuit du test.
+    if nargin < 8 || isempty(night_mode), night_mode = 'day'; end
     if nargin >= 7 && ~isempty(isnight)
-        y_pred(isnight) = 0;
+        switch night_mode
+            case 'day'
+                keep   = ~isnight;
+                y_pred = y_pred(keep);
+                y_test = y_test(keep);
+            case 'zero'
+                y_pred(isnight) = 0;
+        end
     end
 % Bloc de metriques commun a tous les modeles (baselines, ELM, AR).
 %   nRMSE = RMSE / moyenne de production sur le test.

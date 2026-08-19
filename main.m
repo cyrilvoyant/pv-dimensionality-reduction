@@ -54,6 +54,7 @@ P.dataDir     = 'data';                            % sous-dossier des donnees (r
 P.fileName    = 'PV_AC_20200801_20250706_Palaiseau.csv';   % un site ; format a conserver
 P.lat         = 48.7131;       % latitude du site (deg N) -- Palaiseau ; a changer par site
 P.lon         = 2.2121;        % longitude du site (deg E) -- pour le masque nuit (elevation solaire)
+P.night       = 'day';         % metriques : 'day' = jour seulement (defaut) | 'zero' = prev.=0 la nuit | 'all'
 
 P.KNN_OOS     = 12;            % voisins pour l'extension kNN (DiffusionMaps / repli)
 P.SEED        = 42;            % reproductibilite (landmarks, sous-echantillons)
