@@ -62,8 +62,16 @@ function E = dr_embed(method, X_train, X_test, P)
             % Non lineaire : ajustement sur landmarks (tires sur toute la
             % periode de calibration, donc toutes saisons representees).
             nTr  = size(X_train, 1);
+            Lmax = P.L_MAX;
+            if strcmpi(method, 'KernelPCA')
+                % kernel_pca.m (drtoolbox) bascule sur un eigs a handle de
+                % fonction des que >= 2000 points, incompatible avec le eigs de
+                % MATLAB recent (il plante). On reste sous le seuil pour garder
+                % la decomposition dense eig, qui fonctionne.
+                Lmax = min(Lmax, 1800);
+            end
             rng(P.SEED);                              % landmarks reproductibles
-            Lsel = randperm(nTr, min(P.L_MAX, nTr));
+            Lsel = randperm(nTr, min(Lmax, nTr));
             Xl   = X_train(Lsel, :);
 
             if strcmpi(method, 'LLE')
