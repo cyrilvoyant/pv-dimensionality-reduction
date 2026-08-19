@@ -49,36 +49,27 @@ function D = prepare_supervised(data, dt_all, P, FH)
     D.TEMP_test  = TEMP(idx_split+1:end, :);
 
     % Masque NUIT sur le test : elevation solaire <= 0 a l'instant cible. La
-    % production PV y est nulle, il n'y a rien a prevoir. P.night dit comment
-    % la traiter dans les metriques (cf. eval_metrics) : 'day' (defaut) = de
-    % jour seulement ; 'zero' = prevision forcee a 0 la nuit ; 'all' = tout.
+    % prevision est TOUJOURS nulle la nuit (production PV nulle), persistance de
+    % reference comprise. Le mode P.night ne change que la FENETRE des metriques :
+    %   'day' (defaut) = de jour seulement ; 'all' = toutes les heures.
     el_test   = solar_elevation(dt(idx_split+1:end), P.lat, P.lon);
     D.isnight = el_test <= 0;
     D.night   = P.night;
 
-    % Denominateurs NICE^k (erreurs de la persistance simple), coherents avec
-    % le mode. La persistance garde NICE^k = 1 par construction.
+    % Denominateurs NICE^k (persistance simple, mise a 0 la nuit) sur la fenetre
+    % du mode. La persistance garde NICE^k = 1 par construction.
     Persis = PVin(idx_split+1:end, end);
-    switch P.night
-        case 'day'                                     % de jour seulement
-            keep = ~D.isnight;
-            D.MAE_P  = compute_Lk_error(D.y_test(keep), Persis(keep), 1);
-            D.RMSE_P = compute_Lk_error(D.y_test(keep), Persis(keep), 2);
-            D.RMCE_P = compute_Lk_error(D.y_test(keep), Persis(keep), 3);
-            D.mean_y_test = mean(D.y_test(keep));
-        case 'zero'                                    % persistance a 0 la nuit
-            Persis(D.isnight) = 0;
-            D.MAE_P  = compute_Lk_error(D.y_test, Persis, 1);
-            D.RMSE_P = compute_Lk_error(D.y_test, Persis, 2);
-            D.RMCE_P = compute_Lk_error(D.y_test, Persis, 3);
-            D.mean_y_test = mean(D.y_test(~D.isnight));
-        otherwise                                      % 'all' : jour + nuit bruts
-            D.MAE_P  = compute_Lk_error(D.y_test, Persis, 1);
-            D.RMSE_P = compute_Lk_error(D.y_test, Persis, 2);
-            D.RMCE_P = compute_Lk_error(D.y_test, Persis, 3);
-            D.mean_y_test = mean(D.y_test);
-    end
+    Persis(D.isnight) = 0;
     D.Persis_simple_test = Persis;
+    if strcmp(P.night, 'day')
+        keep = ~D.isnight;                             % de jour seulement
+    else
+        keep = true(size(D.y_test));                   % toutes les heures
+    end
+    D.MAE_P  = compute_Lk_error(D.y_test(keep), Persis(keep), 1);
+    D.RMSE_P = compute_Lk_error(D.y_test(keep), Persis(keep), 2);
+    D.RMCE_P = compute_Lk_error(D.y_test(keep), Persis(keep), 3);
+    D.mean_y_test = mean(D.y_test(keep));
 
     % Elements necessaires aux persistances cyclique / blend.
     D.data        = data;

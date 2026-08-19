@@ -97,12 +97,11 @@ and watch the error move as the model grows or shrinks. Each row carries:
 By construction the simple persistence has `NICE^k = 1` at every order — it is
 the denominator of the NICE metrics, so a model is "good" when its NICE is below 1.
 
-Since there is nothing to forecast at night, the metrics are computed on
-daytime samples only (solar elevation > 0 at the target time). `P.night`
-selects the behaviour: `'day'` (default) evaluates daytime only, `'zero'`
-clamps the night forecasts to zero and keeps every sample, `'all'` keeps
-everything untouched. Set the site coordinates with `P.lat` / `P.lon`, and make
-sure the timestamps are in **UTC** (convert local-time datasets first, e.g.
+Forecasts are always clamped to zero at night (there is nothing to forecast when
+production is null). `P.night` then only sets the metric window: `'day'`
+(default) scores daytime samples only (solar elevation > 0 at the target time),
+`'all'` scores every hour. Set the site coordinates with `P.lat` / `P.lon`, and
+make sure the timestamps are in **UTC** (convert local-time datasets first, e.g.
 Alice Springs).
 
 ---
