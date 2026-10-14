@@ -1,6 +1,7 @@
 # pv-dimensionality-reduction
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21755939.svg)](https://doi.org/10.5281/zenodo.21755939)
+[![SWH](https://archive.softwareheritage.org/badge/swh:1:dir:aa13ee70dc38cfad2ba5d6e8020aab621da11cdb/)](https://archive.softwareheritage.org/swh:1:dir:aa13ee70dc38cfad2ba5d6e8020aab621da11cdb;origin=https://github.com/cyrilvoyant/pv-dimensionality-reduction;visit=swh:1:snp:35c5a6a25106788a4a6ce52dede54beb7af37c3d;anchor=swh:1:rev:1e1c248102ce3992811e91ea8d1d31b509b7d522;path=/)
 **How much of the lagged photovoltaic (PV) signal do you actually need to forecast it?**
 
 This repository contains the MATLAB code behind a study on short-term PV power
