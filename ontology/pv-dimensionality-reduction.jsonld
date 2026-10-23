@@ -1,71 +1,147 @@
 {
   "@context": {
+    "": "https://cyrilvoyant.github.io/ontology/pv-dimensionality-reduction#",
     "@vocab": "https://schema.org/",
-    "wsem": "https://w3id.org/websemantic/ns#"
+    "dcterms": "http://purl.org/dc/terms/",
+    "owl": "http://www.w3.org/2002/07/owl#",
+    "qk": "http://qudt.org/vocab/quantitykind/",
+    "skos": "http://www.w3.org/2004/02/skos/core#",
+    "unit": "http://qudt.org/vocab/unit/",
+    "wsem": "https://w3id.org/websemantic/ns#",
+    "xsd": "http://www.w3.org/2001/XMLSchema#"
   },
-  "@type": "SoftwareSourceCode",
-  "@id": "https://doi.org/10.5281/zenodo.21755938",
-  "name": "Filter and wrapper diagnostics of dimensionality reduction for endogenous PV power forecasting (MATLAB)",
-  "description": "Compresses the lagged history of a PV plant before an ELM reads it, and judges each reduction twice: does the reduced space keep the geometry (filter), and does it help the forecast (wrapper)?",
-  "codeRepository": "https://github.com/cyrilvoyant/pv-dimensionality-reduction",
-  "license": "MIT",
-  "programmingLanguage": "MATLAB",
-  "keywords": [
-    "dimensionality reduction",
-    "PV forecasting",
-    "extreme learning machine",
-    "manifold learning"
-  ],
-  "dateModified": "2026-10-23",
-  "author": [
+  "@graph": [
     {
+      "@id": "https://orcid.org/0000-0002-6267-9632",
+      "@type": "Person",
+      "name": "Gilles Notton"
+    },
+    {
+      "@id": "https://cyrilvoyant.github.io/ontology/pv-dimensionality-reduction#software",
+      "@type": [
+        "wsem:Software",
+        "SoftwareSourceCode"
+      ],
+      "author": [
+        {
+          "@id": "_:Nf0b4690a7c204875b2f341bad440552c"
+        },
+        {
+          "@id": "_:N6fc970d4de394b4da0ca1a4aa8da088e"
+        },
+        {
+          "@id": "_:Nec2b8284b7b1471d94282d430d21b625"
+        },
+        {
+          "@id": "_:N8508206ada194616a5228ee79f28c88a"
+        },
+        {
+          "@id": "https://orcid.org/0000-0002-6267-9632"
+        },
+        {
+          "@id": "https://orcid.org/0009-0002-2156-8538"
+        },
+        {
+          "@id": "https://orcid.org/0000-0003-0242-7377"
+        }
+      ],
+      "codeRepository": {
+        "@id": "https://github.com/cyrilvoyant/pv-dimensionality-reduction"
+      },
+      "dateModified": {
+        "@type": "xsd:date",
+        "@value": "2026-10-23"
+      },
+      "dcterms:modified": "2026-10-23",
+      "description": "Compresses the lagged history of a PV plant before an ELM reads it, and judges each reduction twice: does the reduced space keep the geometry (filter), and does it help the forecast (wrapper)?",
+      "identifier": {
+        "@id": "https://doi.org/10.5281/zenodo.21755938"
+      },
+      "keywords": [
+        "dimensionality reduction",
+        "PV forecasting",
+        "extreme learning machine",
+        "manifold learning"
+      ],
+      "license": "MIT",
+      "name": "Filter and wrapper diagnostics of dimensionality reduction for endogenous PV power forecasting (MATLAB)",
+      "owl:sameAs": {
+        "@id": "https://doi.org/10.5281/zenodo.21755938"
+      },
+      "programmingLanguage": "MATLAB",
+      "wsem:conceptDOI": "https://doi.org/10.5281/zenodo.21755938",
+      "wsem:declaresOutput": {
+        "@id": "https://cyrilvoyant.github.io/ontology/pv-dimensionality-reduction#out0"
+      },
+      "wsem:declaresParameter": {
+        "@id": "https://cyrilvoyant.github.io/ontology/pv-dimensionality-reduction#in0"
+      }
+    },
+    {
+      "@id": "_:Nf0b4690a7c204875b2f341bad440552c",
       "@type": "Person",
       "name": "Hassen Bouzgou"
     },
     {
+      "@id": "_:N6fc970d4de394b4da0ca1a4aa8da088e",
       "@type": "Person",
       "name": "Gabriel Chesnoiu"
     },
     {
+      "@id": "_:Nec2b8284b7b1471d94282d430d21b625",
       "@type": "Person",
       "name": "Claudio F. Nicolosi"
     },
     {
+      "@id": "_:N8508206ada194616a5228ee79f28c88a",
       "@type": "Person",
       "name": "Adrien Chatel"
     },
     {
+      "@id": "https://orcid.org/0000-0003-0242-7377",
       "@type": "Person",
-      "name": "Gilles Notton",
-      "@id": "https://orcid.org/0000-0002-6267-9632"
+      "name": "Cyril Voyant"
     },
     {
+      "@id": "https://orcid.org/0009-0002-2156-8538",
       "@type": "Person",
-      "name": "Lionel Menard",
-      "@id": "https://orcid.org/0009-0002-2156-8538"
+      "name": "Lionel Menard"
     },
     {
-      "@type": "Person",
-      "name": "Cyril Voyant",
-      "@id": "https://orcid.org/0000-0003-0242-7377"
-    }
-  ],
-  "wsem:declaresParameter": [
-    {
-      "@type": "PropertyValueSpecification",
-      "name": "data",
-      "description": "PV power series of the study (data/ folder)",
-      "valueRequired": true,
-      "unitText": "kW",
-      "unitCode": "http://qudt.org/vocab/unit/KiloW"
-    }
-  ],
-  "wsem:declaresOutput": [
-    {
-      "@type": "PropertyValueSpecification",
-      "name": "tables",
+      "@id": "https://cyrilvoyant.github.io/ontology/pv-dimensionality-reduction#out0",
+      "@type": [
+        "wsem:OutputVariable",
+        "PropertyValueSpecification"
+      ],
       "description": "errors by method and dimension, parameter reduction against the full-input ELM, baselines",
-      "valueRequired": true
+      "name": "tables",
+      "skos:definition": "errors by method and dimension, parameter reduction against the full-input ELM, baselines",
+      "skos:prefLabel": "tables",
+      "valueRequired": true,
+      "wsem:apiVariable": "tables"
+    },
+    {
+      "@id": "https://cyrilvoyant.github.io/ontology/pv-dimensionality-reduction#in0",
+      "@type": [
+        "wsem:ParameterDefinition",
+        "PropertyValueSpecification"
+      ],
+      "description": "PV power series of the study (data/ folder)",
+      "name": "data",
+      "skos:definition": "PV power series of the study (data/ folder)",
+      "skos:prefLabel": "data",
+      "unitCode": {
+        "@id": "unit:KiloW"
+      },
+      "unitText": "kW",
+      "valueRequired": true,
+      "wsem:apiVariable": "data",
+      "wsem:canonicalUnit": {
+        "@id": "unit:KiloW"
+      },
+      "wsem:quantityKind": {
+        "@id": "qk:Power"
+      }
     }
   ]
 }
