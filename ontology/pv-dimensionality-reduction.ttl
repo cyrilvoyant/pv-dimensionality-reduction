@@ -1,0 +1,43 @@
+@prefix wsem: <https://w3id.org/websemantic/ns#> .
+@prefix schema: <https://schema.org/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix qudt: <http://qudt.org/schema/qudt/> .
+@prefix unit: <http://qudt.org/vocab/unit/> .
+@prefix qk: <http://qudt.org/vocab/quantitykind/> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix : <https://cyrilvoyant.github.io/ontology/pv-dimensionality-reduction#> .
+
+# Instances of the WebSemantic core vocabulary for pv-dimensionality-reduction (generated 2026-10-23; documentation only).
+
+:software a wsem:Software, schema:SoftwareSourceCode ;
+    schema:name "Filter and wrapper diagnostics of dimensionality reduction for endogenous PV power forecasting (MATLAB)" ;
+    schema:codeRepository <https://github.com/cyrilvoyant/pv-dimensionality-reduction> ;
+    wsem:conceptDOI "https://doi.org/10.5281/zenodo.21755938" ;
+    schema:identifier <https://doi.org/10.5281/zenodo.21755938> ;
+    schema:license "MIT" ;
+    schema:programmingLanguage "MATLAB" ;
+    schema:description "Compresses the lagged history of a PV plant before an ELM reads it, and judges each reduction twice: does the reduced space keep the geometry (filter), and does it help the forecast (wrapper)?" ;
+    schema:author [ a schema:Person ; schema:name "Hassen Bouzgou" ] ;
+    schema:author [ a schema:Person ; schema:name "Gabriel Chesnoiu" ] ;
+    schema:author [ a schema:Person ; schema:name "Claudio F. Nicolosi" ] ;
+    schema:author [ a schema:Person ; schema:name "Adrien Chatel" ] ;
+    schema:author <https://orcid.org/0000-0002-6267-9632> ;
+    schema:author <https://orcid.org/0009-0002-2156-8538> ;
+    schema:author <https://orcid.org/0000-0003-0242-7377> ;
+    wsem:declaresParameter :in0 ;
+    wsem:declaresOutput :out0 ;
+    dcterms:modified "2026-10-23" .
+
+<https://orcid.org/0000-0002-6267-9632> a schema:Person ; schema:name "Gilles Notton" .
+<https://orcid.org/0009-0002-2156-8538> a schema:Person ; schema:name "Lionel Menard" .
+<https://orcid.org/0000-0003-0242-7377> a schema:Person ; schema:name "Cyril Voyant" .
+:in0 a wsem:ParameterDefinition ;
+    skos:prefLabel "data" ;
+    wsem:apiVariable "data" ;
+    skos:definition "PV power series of the study (data/ folder)" ;
+    wsem:canonicalUnit unit:KiloW ;
+    wsem:quantityKind qk:Power .
+:out0 a wsem:OutputVariable ;
+    skos:prefLabel "tables" ;
+    wsem:apiVariable "tables" ;
+    skos:definition "errors by method and dimension, parameter reduction against the full-input ELM, baselines" .

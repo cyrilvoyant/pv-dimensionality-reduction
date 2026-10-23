@@ -1,0 +1,84 @@
+{
+  "descriptor": "websemantic-lite/0.1",
+  "generated": "2026-10-23",
+  "vocabulary": "https://w3id.org/websemantic/ns#",
+  "software": {
+    "name": "pv-dimensionality-reduction",
+    "title": "Filter and wrapper diagnostics of dimensionality reduction for endogenous PV power forecasting (MATLAB)",
+    "repository": "https://github.com/cyrilvoyant/pv-dimensionality-reduction",
+    "conceptDOI": "https://doi.org/10.5281/zenodo.21755938",
+    "license": "MIT",
+    "programmingLanguage": "MATLAB",
+    "authors": [
+      {
+        "name": "Hassen Bouzgou"
+      },
+      {
+        "name": "Gabriel Chesnoiu"
+      },
+      {
+        "name": "Claudio F. Nicolosi"
+      },
+      {
+        "name": "Adrien Chatel"
+      },
+      {
+        "name": "Gilles Notton",
+        "orcid": "https://orcid.org/0000-0002-6267-9632"
+      },
+      {
+        "name": "Lionel Menard",
+        "orcid": "https://orcid.org/0009-0002-2156-8538"
+      },
+      {
+        "name": "Cyril Voyant",
+        "orcid": "https://orcid.org/0000-0003-0242-7377"
+      }
+    ]
+  },
+  "article": {
+    "citation": "H. Bouzgou, G. Chesnoiu, C. F. Nicolosi, A. Chatel, G. Notton, L. Menard, C. Voyant. Dimensionality reduction with redundancy awareness for parsimonious PV power time series forecasting",
+    "doi": null,
+    "status": "manuscript in preparation; no result of it is reported here"
+  },
+  "tasks": {
+    "supported": [
+      "test whether compressing the lagged input helps a PV forecast"
+    ],
+    "out_of_scope": [
+      "results of the manuscript in preparation"
+    ]
+  },
+  "inputs": [
+    {
+      "field": "data",
+      "type": "series",
+      "required": true,
+      "definition": "PV power series of the study (data/ folder)",
+      "unit": "unit:KiloW",
+      "unit_symbol": "kW",
+      "unit_iri": "http://qudt.org/vocab/unit/KiloW",
+      "quantity_kind_iri": "http://qudt.org/vocab/quantitykind/Power"
+    }
+  ],
+  "outputs": [
+    {
+      "field": "tables",
+      "type": "table",
+      "required": true,
+      "definition": "errors by method and dimension, parameter reduction against the full-input ELM, baselines"
+    }
+  ],
+  "rules": [
+    "Never invent a value. Each input is given by the user, an exact unit conversion of a given value, or a documented default that the user explicitly accepts.",
+    "Use the canonical unit of each field; convert exactly and say so (for example 2 km -> 2000 m). Never mix a percentage and a fraction.",
+    "Ask when a request is ambiguous or a required input is missing; do not infer a number from a place name or a qualitative word.",
+    "Run the code unmodified. Report only what was actually computed, with quantity, unit and the input values used; never present a planned or unavailable run as a result.",
+    "State the scope and the limits below when you report a result.",
+    "Results belong to a manuscript in preparation."
+  ],
+  "limits": [
+    "Parallel Computing Toolbox recommended (parfor); bundled drtoolbox third-party code, see THIRD_PARTY.md."
+  ],
+  "full_contract": null
+}

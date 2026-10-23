@@ -1,0 +1,71 @@
+{
+  "@context": {
+    "@vocab": "https://schema.org/",
+    "wsem": "https://w3id.org/websemantic/ns#"
+  },
+  "@type": "SoftwareSourceCode",
+  "@id": "https://doi.org/10.5281/zenodo.21755938",
+  "name": "Filter and wrapper diagnostics of dimensionality reduction for endogenous PV power forecasting (MATLAB)",
+  "description": "Compresses the lagged history of a PV plant before an ELM reads it, and judges each reduction twice: does the reduced space keep the geometry (filter), and does it help the forecast (wrapper)?",
+  "codeRepository": "https://github.com/cyrilvoyant/pv-dimensionality-reduction",
+  "license": "MIT",
+  "programmingLanguage": "MATLAB",
+  "keywords": [
+    "dimensionality reduction",
+    "PV forecasting",
+    "extreme learning machine",
+    "manifold learning"
+  ],
+  "dateModified": "2026-10-23",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Hassen Bouzgou"
+    },
+    {
+      "@type": "Person",
+      "name": "Gabriel Chesnoiu"
+    },
+    {
+      "@type": "Person",
+      "name": "Claudio F. Nicolosi"
+    },
+    {
+      "@type": "Person",
+      "name": "Adrien Chatel"
+    },
+    {
+      "@type": "Person",
+      "name": "Gilles Notton",
+      "@id": "https://orcid.org/0000-0002-6267-9632"
+    },
+    {
+      "@type": "Person",
+      "name": "Lionel Menard",
+      "@id": "https://orcid.org/0009-0002-2156-8538"
+    },
+    {
+      "@type": "Person",
+      "name": "Cyril Voyant",
+      "@id": "https://orcid.org/0000-0003-0242-7377"
+    }
+  ],
+  "wsem:declaresParameter": [
+    {
+      "@type": "PropertyValueSpecification",
+      "name": "data",
+      "description": "PV power series of the study (data/ folder)",
+      "valueRequired": true,
+      "unitText": "kW",
+      "unitCode": "http://qudt.org/vocab/unit/KiloW"
+    }
+  ],
+  "wsem:declaresOutput": [
+    {
+      "@type": "PropertyValueSpecification",
+      "name": "tables",
+      "description": "errors by method and dimension, parameter reduction against the full-input ELM, baselines",
+      "valueRequired": true
+    }
+  ]
+}
